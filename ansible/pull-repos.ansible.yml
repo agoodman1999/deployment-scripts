@@ -25,9 +25,7 @@
     - name: wait for connection
       wait_for_connection:
         delay: 5
-        timeout: 600
-
-    
+        timeout: 600    
 
     - name: checkout nextjs repo
       git:
@@ -133,7 +131,7 @@
       
     - name: start strapi in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi" -- develop
+      command: pm2 start npm --name "strapi-dev" -- develop
       args:
         chdir: ~/strapi
       when: PRODUCTION != "true"
