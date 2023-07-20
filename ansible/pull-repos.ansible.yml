@@ -110,28 +110,28 @@
 
     - name: start nextjs in production mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "nextjs-prod" -- start
+      command: pm2 start npm --name "nextjs-prod" -- run start
       args:
         chdir: ~/nextjs
       when: PRODUCTION == "true"
 
     - name: start nextjs in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "nextjs-dev" -- dev
+      command: pm2 start npm --name "nextjs-dev" -- run dev
       args:
         chdir: ~/nextjs
       when: PRODUCTION != "true"
 
     - name: start strapi in production mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi-prod" -- start
+      command: pm2 start npm --name "strapi-prod" -- run start
       args:
         chdir: ~/strapi
       when: PRODUCTION == "true"
       
     - name: start strapi in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi-dev" -- develop
+      command: pm2 start npm --name "strapi-dev" -- run develop
       args:
         chdir: ~/strapi
       when: PRODUCTION != "true"
