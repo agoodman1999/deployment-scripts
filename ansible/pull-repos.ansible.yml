@@ -22,10 +22,6 @@
         delay: 5
         timeout: 600
 
-    - name: Debug PRODUCTION variable
-      debug:
-        var: PRODUCTION
-
     - name: checkout nextjs repo
       git:
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
@@ -95,7 +91,7 @@
       command: npm run build
       args:
         chdir: ~/nextjs
-      when: "{{ PRODUCTION }}" == "true"
+      when: PRODUCTION == "true"
 
     - name: build strapi 
       command: npm run build
@@ -112,25 +108,25 @@
       command: pm2 start npm --name "nextjs-prod" -- start
       args:
         chdir: ~/nextjs
-      when: "{{ PRODUCTION }}" == "true"
+      when: PRODUCTION == "true"
 
     - name: start nextjs in development mode with pm2
       become_user: bitnami
       command: pm2 start npm --name "nextjs-dev" -- dev
       args:
         chdir: ~/nextjs
-      when: "{{ PRODUCTION }}" != "true"
+      when: PRODUCTION != "true"
 
     - name: start strapi in production mode with pm2
       become_user: bitnami
       command: pm2 start npm --name "strapi-prod" -- start
       args:
         chdir: ~/strapi
-      when: "{{ PRODUCTION }}" == "true"
+      when: PRODUCTION == "true"
       
     - name: start strapi in development mode with pm2
       become_user: bitnami
       command: pm2 start npm --name "strapi" -- develop
       args:
         chdir: ~/strapi
-      when: "{{ PRODUCTION }}" != "true"
+      when: PRODUCTION != "true"
