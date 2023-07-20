@@ -26,7 +26,6 @@
       debug:
         var: PRODUCTION
 
-
     - name: checkout nextjs repo
       git:
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
