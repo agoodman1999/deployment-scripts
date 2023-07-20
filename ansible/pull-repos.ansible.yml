@@ -102,6 +102,7 @@
       command: npm run build
       args:
         chdir: ~/strapi
+      when: PRODUCTION == "true"
 
     - name: delete old pm2 processes
       become_user: bitnami
