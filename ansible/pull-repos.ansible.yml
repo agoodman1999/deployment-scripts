@@ -16,6 +16,9 @@
 - hosts: "{{ HOST }}"
   gather_facts: false
 
+  vars:
+    PRODUCTION: "{{ PRODUCTION | default('false') }}"
+
   tasks:
     - name: wait for connection
       wait_for_connection:
