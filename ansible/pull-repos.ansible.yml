@@ -20,10 +20,15 @@
     PRODUCTION: "{{ PRODUCTION | default('false') }}"
 
   tasks:
+
+    - name: debug production env
+      debug:
+        var: PRODUCTION
+
     - name: wait for connection
       wait_for_connection:
         delay: 5
-        timeout: 600
+        timeout: 600    
 
     - name: checkout nextjs repo
       git:
@@ -100,6 +105,7 @@
       command: npm run build
       args:
         chdir: ~/strapi
+      when: PRODUCTION == "true"
 
     - name: delete old pm2 processes
       become_user: bitnami
@@ -108,28 +114,28 @@
 
     - name: start nextjs in production mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "nextjs-prod" -- start
+      command: pm2 start npm --name "nextjs-prod" -- run start
       args:
         chdir: ~/nextjs
       when: PRODUCTION == "true"
 
     - name: start nextjs in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "nextjs-dev" -- dev
+      command: pm2 start npm --name "nextjs-dev" -- run dev
       args:
         chdir: ~/nextjs
       when: PRODUCTION != "true"
 
     - name: start strapi in production mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi-prod" -- start
+      command: pm2 start npm --name "strapi-prod" -- run start
       args:
         chdir: ~/strapi
       when: PRODUCTION == "true"
       
     - name: start strapi in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi" -- develop
+      command: pm2 start npm --name "strapi-dev" -- run develop
       args:
         chdir: ~/strapi
       when: PRODUCTION != "true"
