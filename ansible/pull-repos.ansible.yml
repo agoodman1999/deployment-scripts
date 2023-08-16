@@ -71,41 +71,41 @@
         production: yes
         registry: https://registry.npmjs.org/
 
-    - name: copy nextjs env file
-      become_user: bitnami
-      copy:
-        content: "{{ NEXTJS_ENV }}"
-        dest: ~/nextjs/.env.local
+    # - name: copy nextjs env file
+    #   become_user: bitnami
+    #   copy:
+    #     content: "{{ NEXTJS_ENV }}"
+    #     dest: ~/nextjs/.env.local
 
-    - name: copy strapi env file
-      become_user: bitnami
-      copy:
-        content: "{{ STRAPI_ENV }}"
-        dest: ~/strapi/.env
+    # - name: copy strapi env file
+    #   become_user: bitnami
+    #   copy:
+    #     content: "{{ STRAPI_ENV }}"
+    #     dest: ~/strapi/.env
 
-    - name: replace nextjs env file spaces with newlines
-      become_user: bitnami
-      shell:
-        cmd: sed -i 's/ /\n/g' ~/nextjs/.env.local
-        executable: /bin/bash
+    # - name: replace nextjs env file spaces with newlines
+    #   become_user: bitnami
+    #   shell:
+    #     cmd: sed -i 's/ /\n/g' ~/nextjs/.env.local
+    #     executable: /bin/bash
 
-    - name: replace strapi env file spaces with newlines
-      become_user: bitnami
-      shell:
-        cmd: sed -i 's/ /\n/g' ~/strapi/.env
-        executable: /bin/bash
+    # - name: replace strapi env file spaces with newlines
+    #   become_user: bitnami
+    #   shell:
+    #     cmd: sed -i 's/ /\n/g' ~/strapi/.env
+    #     executable: /bin/bash
 
-    - name: build nextjs
-      command: npm run build
-      args:
-        chdir: ~/nextjs
-      when: PRODUCTION == "true"
+    # - name: build nextjs
+    #   command: npm run build
+    #   args:
+    #     chdir: ~/nextjs
+    #   when: PRODUCTION == "true"
 
-    - name: build strapi 
-      command: npm run build
-      args:
-        chdir: ~/strapi
-      when: PRODUCTION == "true"
+    # - name: build strapi 
+    #   command: npm run build
+    #   args:
+    #     chdir: ~/strapi
+    #   when: PRODUCTION == "true"
 
     - name: delete old pm2 processes
       become_user: bitnami
@@ -114,28 +114,28 @@
 
     - name: start nextjs in production mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "nextjs-prod" -- run start
+      command: pm2 start run-nextjs.sh --name "nextjs-prod"
       args:
         chdir: ~/nextjs
       when: PRODUCTION == "true"
 
     - name: start nextjs in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "nextjs-dev" -- run dev
+      command: pm2 start run-nextjs-dev.sh --name "nextjs-dev"
       args:
         chdir: ~/nextjs
       when: PRODUCTION != "true"
 
     - name: start strapi in production mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi-prod" -- run start
+      command: pm2 start run-strapi.sh --name "strapi-prod"
       args:
         chdir: ~/strapi
       when: PRODUCTION == "true"
       
     - name: start strapi in development mode with pm2
       become_user: bitnami
-      command: pm2 start npm --name "strapi-dev" -- run develop
+      command: pm2 start run-strapi-dev.sh --name "strapi-dev"
       args:
         chdir: ~/strapi
       when: PRODUCTION != "true"
