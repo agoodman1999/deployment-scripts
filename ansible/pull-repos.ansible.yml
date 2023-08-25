@@ -18,9 +18,9 @@
 
   vars:
     PRODUCTION: "false"
+    DEVELOPMENT: "true"
 
   tasks:
-
     - name: debug production env
       debug:
         var: PRODUCTION
@@ -30,27 +30,52 @@
         delay: 5
         timeout: 600    
 
-    - name: checkout nextjs repo
+    - name: checkout nextjs repo for development
       git:
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
         dest: ~/nextjs
-        version: "{{ NEXTJS_REPO_BRANCH }}"
-        force: yes
+        version: "main"
+        force: false
         recursive: yes
         clone: yes
         depth: 1
-      register: nextjs_repo
+      when: DEVELOPMENT == "true"
+      #register: nextjs_repo
 
-    - name: checkout strapi repo
+    - name: checkout nextjs repo for production
+      git:
+        repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
+        dest: ~/nextjs-prod
+        version: "production"
+        force: false
+        recursive: yes
+        clone: yes
+        depth: 1
+      when: PRODUCTION == "true"
+
+    - name: checkout strapi repo for development
       git:
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ STRAPI_REPO_ID }}
         dest: ~/strapi
-        version: "{{ STRAPI_REPO_BRANCH }}"
-        force: yes
+        version: "main"
+        force: false
         recursive: yes
         clone: yes
         depth: 1
-      register: strapi_repo
+      when: DEVELOPMENT == "true"
+      #register: strapi_repo
+
+    - name: checkout strapi repo for production
+      git:
+        repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ STRAPI_REPO_ID }}
+        dest: ~/strapi-prod
+        version: "production"
+        force: false
+        recursive: yes
+        clone: yes
+        depth: 1
+      when: PRODUCTION == "true"
+      #register: strapi_repo
 
     - name: install pm2 using npm
       become: yes
@@ -59,53 +84,33 @@
         cmd: sudo npm install pm2 -g
         executable: /bin/bash
 
-    - name: install deps for nextjs
+    - name: install deps for nextjs development
       npm:
         path: ~/nextjs
+        production: no
+        registry: https://registry.npmjs.org/
+      when: DEVELOPMENT == "true"
+
+    - name: install deps for nextjs production
+      npm:
+        path: ~/nextjs-prod
         production: yes
         registry: https://registry.npmjs.org/
+      when: PRODUCTION == "true"
 
-    - name: install deps for strapi
+    - name: install deps for strapi development
       npm:
         path: ~/strapi
+        production: no
+        registry: https://registry.npmjs.org/
+      when: DEVELOPMENT == "true"
+
+    - name: install deps for strapi production
+      npm:
+        path: ~/strapi-prod
         production: yes
         registry: https://registry.npmjs.org/
-
-    # - name: copy nextjs env file
-    #   become_user: bitnami
-    #   copy:
-    #     content: "{{ NEXTJS_ENV }}"
-    #     dest: ~/nextjs/.env.local
-
-    # - name: copy strapi env file
-    #   become_user: bitnami
-    #   copy:
-    #     content: "{{ STRAPI_ENV }}"
-    #     dest: ~/strapi/.env
-
-    # - name: replace nextjs env file spaces with newlines
-    #   become_user: bitnami
-    #   shell:
-    #     cmd: sed -i 's/ /\n/g' ~/nextjs/.env.local
-    #     executable: /bin/bash
-
-    # - name: replace strapi env file spaces with newlines
-    #   become_user: bitnami
-    #   shell:
-    #     cmd: sed -i 's/ /\n/g' ~/strapi/.env
-    #     executable: /bin/bash
-
-    # - name: build nextjs
-    #   command: npm run build
-    #   args:
-    #     chdir: ~/nextjs
-    #   when: PRODUCTION == "true"
-
-    # - name: build strapi 
-    #   command: npm run build
-    #   args:
-    #     chdir: ~/strapi
-    #   when: PRODUCTION == "true"
+      when: PRODUCTION == "true"
 
     - name: delete old pm2 processes
       become_user: bitnami
@@ -116,7 +121,7 @@
       become_user: bitnami
       command: pm2 start run-nextjs.sh --name "nextjs-prod"
       args:
-        chdir: ~/nextjs
+        chdir: ~/nextjs-prod
       when: PRODUCTION == "true"
 
     - name: start nextjs in development mode with pm2
@@ -124,13 +129,13 @@
       command: pm2 start run-nextjs-dev.sh --name "nextjs-dev"
       args:
         chdir: ~/nextjs
-      when: PRODUCTION != "true"
+      when: DEVELOPMENT == "true"
 
     - name: start strapi in production mode with pm2
       become_user: bitnami
       command: pm2 start run-strapi.sh --name "strapi-prod"
       args:
-        chdir: ~/strapi
+        chdir: ~/strapi-prod
       when: PRODUCTION == "true"
       
     - name: start strapi in development mode with pm2
@@ -138,4 +143,4 @@
       command: pm2 start run-strapi-dev.sh --name "strapi-dev"
       args:
         chdir: ~/strapi
-      when: PRODUCTION != "true"
+      when: PRODUCTION == "true"

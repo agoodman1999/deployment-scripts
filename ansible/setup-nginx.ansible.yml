@@ -39,20 +39,36 @@
         enabled: yes
         state: started
 
-    - name: copy nginx config template
+    - name: copy nginx config template for dev domain
       become: yes
       template:
         src: nginx.config
         dest: /etc/nginx/sites-available/{{ DOMAIN }}
         mode: 0644
 
-    - name: enable nginx config
-      vars: 
-        domain: _
+    - name: enable nginx config for dev domain
+      #vars: 
+      #  domain: _
       become: yes
       file:
         src: /etc/nginx/sites-available/{{ DOMAIN }}
         dest: /etc/nginx/sites-enabled/{{ DOMAIN }}
+        state: link
+
+    - name: copy nginx config template for prod domain
+      become: yes
+      template:
+        src: nginx-prod.config
+        dest: /etc/nginx/sites-available/{{ DOMAIN_PRODUCTION }}
+        mode: 0644
+
+    - name: enable nginx config for prod domain
+      #vars: 
+      #  domain: _
+      become: yes
+      file:
+        src: /etc/nginx/sites-available/{{ DOMAIN_PRODUCTION }}
+        dest: /etc/nginx/sites-enabled/{{ DOMAIN_PRODUCTION }}
         state: link
 
     - name: restart nginx
