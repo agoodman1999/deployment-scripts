@@ -143,4 +143,4 @@
       command: pm2 start run-strapi-dev.sh --name "strapi-dev"
       args:
         chdir: ~/strapi
-      when: PRODUCTION == "true"
+      when: DEVELOPMENT == "true"
