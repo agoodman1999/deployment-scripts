@@ -61,6 +61,7 @@
         src: nginx-prod.config
         dest: /etc/nginx/sites-available/{{ DOMAIN_PRODUCTION }}
         mode: 0644
+      when: DOMAIN_PRODUCTION is defined and DOMAIN_PRODUCTION | length > 0
 
     - name: enable nginx config for prod domain
       #vars: 
@@ -70,6 +71,7 @@
         src: /etc/nginx/sites-available/{{ DOMAIN_PRODUCTION }}
         dest: /etc/nginx/sites-enabled/{{ DOMAIN_PRODUCTION }}
         state: link
+      when: DOMAIN_PRODUCTION is defined and DOMAIN_PRODUCTION | length > 0
 
     - name: restart nginx
       become: yes
