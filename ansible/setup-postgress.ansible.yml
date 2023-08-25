@@ -47,14 +47,14 @@
       community.general.read_csv:
         path: ~/strapi-dev.csv
         fieldnames: [name, value]
-        delimiter: `,`
+        delimiter: ','
       register: dev_secrets
 
     - name: register variables containing prod secrets from csv files
       community.general.read_csv:
         path: ~/strapi-prod.csv
         fieldnames: [name, value]
-        delimiter: `,`
+        delimiter: ','
       register: prod_secrets
 
     - name: delete csv dev file
