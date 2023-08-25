@@ -35,9 +35,10 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
         dest: ~/nextjs
         version: "main"
-        force: true
+        force: false
         recursive: yes
         clone: yes
+        single_branch: yes
         depth: 1
       when: DEVELOPMENT
       #register: nextjs_repo
@@ -47,9 +48,10 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
         dest: ~/nextjs-prod
         version: "production"
-        force: true
+        force: false
         recursive: yes
         clone: yes
+        single_branch: yes
         depth: 1
       when: PRODUCTION
 
@@ -58,9 +60,10 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ STRAPI_REPO_ID }}
         dest: ~/strapi
         version: "main"
-        force: true
+        force: false
         recursive: yes
         clone: yes
+        single_branch: yes
         depth: 1
       when: DEVELOPMENT
       #register: strapi_repo
@@ -70,9 +73,10 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ STRAPI_REPO_ID }}
         dest: ~/strapi-prod
         version: "production"
-        force: true
+        force: false
         recursive: yes
         clone: yes
+        single_branch: yes
         depth: 1
       when: PRODUCTION
       #register: strapi_repo
@@ -116,6 +120,42 @@
       become_user: bitnami
       command: pm2 delete all
       ignore_errors: yes
+
+    - name: create nextjs dev template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-nextjs-dev.sh
+        dest: ~/nextjs
+        mode: 0755
+      when: DEVELOPMENT
+
+    - name: create nextjs prod template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-nextjs.sh
+        dest: ~/nextjs-prod
+        mode: 0755
+      when: PRODUCTION
+
+    - name: create strapi dev template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-strapi-dev.sh
+        dest: ~/strapi
+        mode: 0755
+      when: DEVELOPMENT
+
+    - name: create strapi prod template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-strapi.sh
+        dest: ~/strapi-prod
+        mode: 0755
+      when: PRODUCTION
 
     - name: start nextjs in production mode with pm2
       become_user: bitnami
