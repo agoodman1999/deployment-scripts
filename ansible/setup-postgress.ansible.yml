@@ -33,6 +33,23 @@
       become: yes
       service: name=postgresql state=started enabled=yes
 
+    - name: download infisical strapi dev secrets
+      become: yes
+      become_user: bitnami
+      shell: "infisical export --domain https://infisical.civiconnect.net/api --token {{ INFISICAL_TOKEN_DEVELOPMENT_STRAPI }} --env dev --path /strapi --format csv $@ > ~/strapi-dev.csv"
+
+    - name: download infisical strapi prod secrets
+      become: yes
+      become_user: bitnami
+      shell: "infisical export --domain https://infisical.civiconnect.net/api --token {{ INFISICAL_TOKEN_PRODUCTION_STRAPI }} --env prod --path /strapi --format csv $@ > ~/strapi-prod.csv"
+
+    - name: register variables containing dev secrets from csv files
+      community.general.read_csv:
+        path: ~/strapi-dev.csv
+        fieldnames: [name, value]
+        delimiter: ','
+      register: dev_secrets
+
     - name: create database
       become_user: postgres
       become: yes
