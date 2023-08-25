@@ -35,7 +35,7 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
         dest: ~/nextjs
         version: "main"
-        force: false
+        force: true
         recursive: yes
         clone: yes
         depth: 1
@@ -47,7 +47,7 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
         dest: ~/nextjs-prod
         version: "production"
-        force: false
+        force: true
         recursive: yes
         clone: yes
         depth: 1
@@ -58,7 +58,7 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ STRAPI_REPO_ID }}
         dest: ~/strapi
         version: "main"
-        force: false
+        force: true
         recursive: yes
         clone: yes
         depth: 1
@@ -70,7 +70,7 @@
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ STRAPI_REPO_ID }}
         dest: ~/strapi-prod
         version: "production"
-        force: false
+        force: true
         recursive: yes
         clone: yes
         depth: 1
