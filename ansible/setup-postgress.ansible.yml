@@ -71,6 +71,17 @@
         path: ~/strapi-prod.csv
         state: absent
 
+    - name: print json queries
+      debug:
+        msg: "{{ item }}"
+      loop:
+        - "{{ prod_secrets | json_query('[?name==`DB_NAME`].value | [0]') }}"
+        - "{{ prod_secrets | json_query('[?name==`DB_USER`].value | [0]') }}"
+        - "{{ prod_secrets | json_query('[?name==`DB_PASSWORD`].value | [0]') }}"
+        - "{{ dev_secrets | json_query('[?name==`DB_NAME`].value | [0]') }}"
+        - "{{ dev_secrets | json_query('[?name==`DB_USER`].value | [0]') }}"
+        - "{{ dev_secrets | json_query('[?name==`DB_PASSWORD`].value | [0]') }}"
+
     - name: create database
       become_user: postgres
       become: yes
