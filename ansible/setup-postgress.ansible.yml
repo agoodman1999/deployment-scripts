@@ -75,15 +75,15 @@
       become_user: postgres
       become: yes
       postgresql_db:
-        name: "{{ prod_secrets | json_query("[?name=='DB_NAME'].value | [0]") }}"
+        name: "{{ prod_secrets | json_query('[?name=='DB_NAME'].value | [0]') }}"
 
     - name: create user
       become_user: postgres
       become: yes
       postgresql_user:
-        name: "{{ prod_secrets | json_query("[?name=='DB_USER'].value | [0]") }}"
-        db: "{{ prod_secrets | json_query("[?name=='DB_NAME'].value | [0]") }}"
-        password: "{{ prod_secrets | json_query("[?name=='DB_PASSWORD'].value | [0]") }}"
+        name: "{{ prod_secrets | json_query('[?name=='DB_USER'].value | [0]') }}"
+        db: "{{ prod_secrets | json_query('[?name=='DB_NAME'].value | [0]') }}"
+        password: "{{ prod_secrets | json_query('[?name=='DB_PASSWORD'].value | [0]') }}"
         priv: "ALL"
         role_attr_flags: SUPERUSER
         state: present
@@ -92,15 +92,15 @@
       become_user: postgres
       become: yes
       postgresql_db:
-        name: "{{ dev_secrets | json_query("[?name=='DB_NAME'].value | [0]") }}"
+        name: "{{ dev_secrets | json_query('[?name=='DB_NAME'].value | [0]') }}"
 
     - name: create dev user
       become_user: postgres
       become: yes
       postgresql_user:
-        name: "{{ dev_secrets | json_query("[?name=='DB_USER'].value | [0]") }}"
-        db: "{{ dev_secrets | json_query("[?name=='DB_NAME'].value | [0]") }}"
-        password: "{{ dev_secrets | json_query("[?name=='DB_PASSWORD'].value | [0]") }}"
+        name: "{{ dev_secrets | json_query('[?name=='DB_USER'].value | [0]') }}"
+        db: "{{ dev_secrets | json_query('[?name=='DB_NAME'].value | [0]') }}"
+        password: "{{ dev_secrets | json_query('[?name=='DB_PASSWORD'].value | [0]') }}"
         priv: "ALL"
         role_attr_flags: SUPERUSER
         state: present
