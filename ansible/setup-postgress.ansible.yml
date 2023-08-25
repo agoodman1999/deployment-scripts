@@ -46,14 +46,14 @@
     - name: register variables containing dev secrets from csv files
       community.general.read_csv:
         path: ~/strapi-dev.csv
-        key: Name
+        key: Key
         delimiter: ','
       register: dev_secrets
 
     - name: register variables containing prod secrets from csv files
       community.general.read_csv:
         path: ~/strapi-prod.csv
-        key: Name
+        key: Key
         delimiter: ','
       register: prod_secrets
 
