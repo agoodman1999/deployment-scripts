@@ -19,42 +19,37 @@
         name: infisical
         state: latest
 
-    - name: create secrets csv file for strapi
+    - name: create nextjs dev template
       become: true
       become_user: bitnami
-      shell: "infisical export --domain https://infisical.civiconnect.net/api --token {{ INFISICAL_TOKEN_STRAPI }} --env dev --path /strapi --format csv $@ > ~/strapi.csv"
+      template:
+        src: run-nextjs-dev.sh
+        dest: ~/nextjs
+        mode: 0755
 
-    # - name: create nextjs dev template
-    #   become: true
-    #   become_user: bitnami
-    #   template:
-    #     src: run-nextjs-dev.sh
-    #     dest: ~/nextjs
-    #     mode: 0755
+    - name: create nextjs prod template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-nextjs.sh
+        dest: ~/nextjs-prod
+        mode: 0755
 
-    # - name: create nextjs prod template
-    #   become: true
-    #   become_user: bitnami
-    #   template:
-    #     src: run-nextjs.sh
-    #     dest: ~/nextjs-prod
-    #     mode: 0755
+    - name: create strapi dev template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-strapi-dev.sh
+        dest: ~/strapi
+        mode: 0755
 
-    # - name: create strapi dev template
-    #   become: true
-    #   become_user: bitnami
-    #   template:
-    #     src: run-strapi-dev.sh
-    #     dest: ~/strapi
-    #     mode: 0755
-
-    # - name: create strapi prod template
-    #   become: true
-    #   become_user: bitnami
-    #   template:
-    #     src: run-strapi.sh
-    #     dest: ~/strapi-prod
-    #     mode: 0755
+    - name: create strapi prod template
+      become: true
+      become_user: bitnami
+      template:
+        src: run-strapi.sh
+        dest: ~/strapi-prod
+        mode: 0755
 
 
 
