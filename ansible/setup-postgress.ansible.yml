@@ -92,14 +92,14 @@
       become_user: postgres
       become: yes
       postgresql_db:
-        name: "{{ dev_secrets.DB_NAME }}_dev"
+        name: "{{ dev_secrets.DB_NAME }}"
 
     - name: create dev user
       become_user: postgres
       become: yes
       postgresql_user:
-        name: "{{ dev_secrets.DB_USER }}_dev"
-        db: "{{ dev_secrets.DB_NAME }}_dev"
+        name: "{{ dev_secrets.DB_USER }}"
+        db: "{{ dev_secrets.DB_NAME }}"
         password: "{{ dev_secrets.DB_PASSWORD }}"
         priv: "ALL"
         role_attr_flags: SUPERUSER
