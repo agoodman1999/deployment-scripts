@@ -75,12 +75,12 @@
       debug:
         msg: "{{ item }}"
       loop:
-        - "{{ prod_secrets | json_query('[?name==`DB_NAME`].value | [0]') }}"
-        - "{{ prod_secrets | json_query('[?name==`DB_USER`].value | [0]') }}"
-        - "{{ prod_secrets | json_query('[?name==`DB_PASSWORD`].value | [0]') }}"
-        - "{{ dev_secrets | json_query('[?name==`DB_NAME`].value | [0]') }}"
-        - "{{ dev_secrets | json_query('[?name==`DB_USER`].value | [0]') }}"
-        - "{{ dev_secrets | json_query('[?name==`DB_PASSWORD`].value | [0]') }}"
+        - "{{ prod_secrets | json_query('[?name==`DB_NAME`].value') }}"
+        - "{{ prod_secrets | json_query('[?name==`DB_USER`].value') }}"
+        - "{{ prod_secrets | json_query('[?name==`DB_PASSWORD`].value') }}"
+        - "{{ dev_secrets | json_query('[?name==`DB_NAME`].value') }}"
+        - "{{ dev_secrets | json_query('[?name==`DB_USER`].value') }}"
+        - "{{ dev_secrets | json_query('[?name==`DB_PASSWORD`].value') }}"
 
     - name: create database
       become_user: postgres
