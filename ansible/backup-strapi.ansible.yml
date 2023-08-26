@@ -22,4 +22,4 @@
         mode: 0755
         
     - name: run script
-      shell: infisical run --env=prod --path="/nextjs" --token="{{ INFISICAL_TOKEN_PRODUCTION_STRAPI }}" -- /home/bitnami/backup-strapi.sh $(echo {{ NEXTJS_REPO_ID }} | tr / -)
+      shell: /home/bitnami/backup-strapi.sh $(echo {{ NEXTJS_REPO_ID }} | tr / -)
