@@ -17,3 +17,6 @@
         
     - name: run script
       shell: /home/bitnami/backup-strapi.sh $(echo {{ NEXTJS_REPO_ID }} | tr / -)
+
+    - name: run script
+      shell: /home/bitnami/backup-strapi-dev.sh $(echo {{ NEXTJS_REPO_ID }} | tr / -)
