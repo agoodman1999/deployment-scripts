@@ -46,7 +46,11 @@ async function createInstance(instanceName) {
 		bundleId: process.env.BUNDLE_ID,
 		userData: userDataScript,
 		//keyPairName: "string",
-		instanceNames: [instanceName]
+		instanceNames: [instanceName],
+		tags: [
+			{key: "DeploymentStatus", value: "Development"},
+			{key: "ProjectID", value: process.env.PROJECT_ID}
+		]
 	})
 
 	const data = await client.send(createInstanceCommand)
