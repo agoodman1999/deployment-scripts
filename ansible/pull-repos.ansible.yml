@@ -40,7 +40,7 @@
         clone: yes
         single_branch: yes
         depth: 1
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
       #register: nextjs_repo
 
     - name: checkout nextjs repo for production
@@ -53,7 +53,7 @@
         clone: yes
         single_branch: yes
         depth: 1
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
 
     - name: checkout strapi repo for development
       git:
@@ -65,7 +65,7 @@
         clone: yes
         single_branch: yes
         depth: 1
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
       #register: strapi_repo
 
     - name: checkout strapi repo for production
@@ -78,7 +78,7 @@
         clone: yes
         single_branch: yes
         depth: 1
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
       #register: strapi_repo
 
     - name: install pm2 using npm
@@ -93,28 +93,28 @@
         path: ~/nextjs
         production: no
         registry: https://registry.npmjs.org/
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
 
     - name: install deps for nextjs production
       npm:
         path: ~/nextjs-prod
         production: yes
         registry: https://registry.npmjs.org/
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
 
     - name: install deps for strapi development
       npm:
         path: ~/strapi
         production: no
         registry: https://registry.npmjs.org/
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
 
     - name: install deps for strapi production
       npm:
         path: ~/strapi-prod
         production: yes
         registry: https://registry.npmjs.org/
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
 
     - name: delete old pm2 processes
       become_user: bitnami
@@ -128,7 +128,7 @@
         src: run-nextjs-dev.sh
         dest: ~/nextjs
         mode: 0755
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
 
     - name: create nextjs prod template
       become: true
@@ -137,7 +137,7 @@
         src: run-nextjs.sh
         dest: ~/nextjs-prod
         mode: 0755
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
 
     - name: create strapi dev template
       become: true
@@ -146,7 +146,7 @@
         src: run-strapi-dev.sh
         dest: ~/strapi
         mode: 0755
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
 
     - name: create strapi prod template
       become: true
@@ -155,32 +155,32 @@
         src: run-strapi.sh
         dest: ~/strapi-prod
         mode: 0755
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
 
     - name: start nextjs in production mode with pm2
       become_user: bitnami
       command: pm2 start run-nextjs.sh --name "nextjs-prod"
       args:
         chdir: ~/nextjs-prod
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
 
     - name: start nextjs in development mode with pm2
       become_user: bitnami
       command: pm2 start run-nextjs-dev.sh --name "nextjs-dev"
       args:
         chdir: ~/nextjs
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
 
     - name: start strapi in production mode with pm2
       become_user: bitnami
       command: pm2 start run-strapi.sh --name "strapi-prod"
       args:
         chdir: ~/strapi-prod
-      when: PRODUCTION && BRANCH == "production"
+      when: PRODUCTION and BRANCH == "production"
       
     - name: start strapi in development mode with pm2
       become_user: bitnami
       command: pm2 start run-strapi-dev.sh --name "strapi-dev"
       args:
         chdir: ~/strapi
-      when: DEVELOPMENT && BRANCH == "development"
+      when: DEVELOPMENT and BRANCH == "development"
