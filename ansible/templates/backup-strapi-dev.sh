@@ -7,5 +7,5 @@ file_name="$1-$instance_id"
 
 cd /home/bitnami/strapi
 infisical run --env=dev --path="/strapi" -- npm run strapi export -- --no-encrypt --file /home/bitnami/strapi/"$file_name"-dev
-aws s3 cp /home/bitnami/strapi/"$file_name".-dev.tar.gz s3://civiconnect-automated-strapi-backups/"$file_name"-dev.tar.gz
+aws s3 cp /home/bitnami/strapi/"$file_name"-dev.tar.gz s3://civiconnect-automated-strapi-backups/"$file_name"-dev.tar.gz
 rm /home/bitnami/strapi/"$file_name"-dev.tar.gz
