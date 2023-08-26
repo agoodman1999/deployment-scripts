@@ -21,7 +21,7 @@
         dest: ~/backup-strapi.sh
         mode: 0755
 
-    - name: copy backup-strapi.sh
+    - name: copy backup-strapi-dev.sh
       template:
         src: backup-strapi-dev.sh
         dest: ~/backup-strapi-dev.sh
