@@ -16,9 +16,15 @@
         aws configure set default.region {{ AWS_REGION }}
 
     - name: copy backup-strapi.sh
-      copy:
+      template:
         src: backup-strapi.sh
         dest: ~/backup-strapi.sh
+        mode: 0755
+
+    - name: copy backup-strapi.sh
+      template:
+        src: backup-strapi-dev.sh
+        dest: ~/backup-strapi-dev.sh
         mode: 0755
         
     - name: setup cron job to run script every day at midnight
@@ -27,6 +33,14 @@
         minute: 0
         hour: 0
         job: /home/bitnami/backup-strapi.sh $(echo {{ NEXTJS_REPO_ID }} | tr / -)
+        state: present
+
+    - name: setup cron job to run script every day at midnight
+      cron:
+        name: backup-strapi-dev
+        minute: 0
+        hour: 0
+        job: /home/bitnami/backup-strapi-dev.sh $(echo {{ NEXTJS_REPO_ID }} | tr / -)
         state: present
 
     - name: register the PATH variable
