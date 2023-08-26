@@ -33,7 +33,6 @@
     - name: print branch
       debug:
         var: BRANCH
-      msg: "branch is {{ BRANCH }}"
 
     - name: checkout nextjs repo for development
       git:
