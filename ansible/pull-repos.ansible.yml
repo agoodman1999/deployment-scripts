@@ -30,6 +30,11 @@
         delay: 5
         timeout: 600    
 
+    - name: print branch
+      debug:
+        var: BRANCH
+      msg: "branch is {{ BRANCH }}"
+
     - name: checkout nextjs repo for development
       git:
         repo: https://{{ GH_USER }}:{{ GH_TOKEN }}@github.com/{{ NEXTJS_REPO_ID }}
