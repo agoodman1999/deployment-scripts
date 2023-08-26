@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { S3Client, CreateBucketCommand, PutPublicAccessBlockCommand, waitUntilBucketExists, HeadBucketCommand, DeleteBucketCommand } = require("@aws-sdk/client-s3")
+const { S3Client, CreateBucketCommand, PutPublicAccessBlockCommand, waitUntilBucketExists, HeadBucketCommand, DeleteBucketCommand, PutBucketTaggingCommand } = require("@aws-sdk/client-s3")
 
 const client = new S3Client({
 	region: process.env.AWS_REGION,
@@ -33,6 +33,20 @@ async function putPublicAccessBlock(bucketName) {
 
 	const putPublicAccessBlockData = await client.send(putPublicAccessBlockCommand)
 	return putPublicAccessBlockData
+}
+
+async function putBucketTag(bucketName) {
+	const putBucketTaggingCommand = new PutBucketTaggingCommand({
+		Bucket: bucketName,
+		Tagging: {
+			TagSet: [
+				{ Key: "ProjectID", Value: process.env.PROJECT_ID }
+			]
+		}
+	})
+
+	const putBucketTaggingData = await client.send(putBucketTaggingCommand)
+	return putBucketTaggingData
 }
 
 async function doesBucketExist(bucketName) {
@@ -80,6 +94,7 @@ async function main() {
 		await createBucket(process.env.S3_BUCKET_NAME)
 		await waitUntilBucketExists({ client, maxWaitTime: 60, minDelay: 1 }, { Bucket: process.env.S3_BUCKET_NAME })
 		await putPublicAccessBlock(process.env.S3_BUCKET_NAME)
+		await putBucketTag(process.env.S3_BUCKET_NAME)
 		console.log("bucket created successfully")
 	} else {
 		console.log("using existing bucket")
