@@ -57,23 +57,22 @@ async function main() {
 	const strapiDomainPrefix = domainPaths.strapiDomainPrefix
 
 	//make sure none of the records already exist
-
 	if (await doesARecordExist(subDomain, rootDomain)) {
-		if (process.env.EXISTING_RESOURCE_BEHAVIOUR === 'fail')
+		if (process.env.EXISTING_RESOURCE_BEHAVIOR === 'fail')
 			throw new Error(`A record already exists for ${subDomain}`)
 	} else {
 		addARecord(subDomain, hostIP, rootDomain)
 	}
 
 	if (await doesARecordExist(`${strapiDomainPrefix}.${subDomain}`, rootDomain)) {
-		if (process.env.EXISTING_RESOURCE_BEHAVIOUR === 'fail')
+		if (process.env.EXISTING_RESOURCE_BEHAVIOR === 'fail')
 			throw new Error(`A record already exists for ${strapiDomainPrefix}.${subDomain}`)
 	} else {
 		addARecord(`${strapiDomainPrefix}.${subDomain}`, hostIP, rootDomain)
 	}
 
 	if (await doesARecordExist(`www.${subDomain}`, rootDomain)) {
-		if (process.env.EXISTING_RESOURCE_BEHAVIOUR === 'fail')
+		if (process.env.EXISTING_RESOURCE_BEHAVIOR === 'fail')
 			throw new Error(`A record already exists for www.${subDomain}`)
 	} else {
 		addARecord(`www.${subDomain}`, hostIP, rootDomain)
