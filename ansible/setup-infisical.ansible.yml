@@ -19,5 +19,13 @@
         name: infisical
         state: latest
 
+    - name: copy update-host-secrets.sh template
+      become: true
+      become_user: bitnami
+      template:
+        src: update-host-secrets.sh
+        dest: /home/bitnami/set-host-secrets.sh
+        mode: 0755
+
 
 
