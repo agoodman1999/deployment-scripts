@@ -184,3 +184,9 @@
       args:
         chdir: ~/strapi
       when: DEVELOPMENT
+
+    - name: update infisical ip and host secrets
+      become_user: bitnami
+      command: |
+        infisical secrets set --domain https://infisical.civiconnect.net --token {{ INFISICAL_TOKEN_DEVELOPMENT_GITHUB }} --env dev HOST_NAME=bitnami HOST_IP=$(curl -s https://ipinfo.io/ip) }}
+  
