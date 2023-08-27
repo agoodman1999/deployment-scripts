@@ -35,7 +35,7 @@ async function doesARecordExist(name, domain) {
 	const response = await axios.get(url, {
 		headers: headers
 	})
-	
+
 	return response.status === 200 && response?.data?.length !== 0
 }
 
@@ -57,18 +57,33 @@ async function main() {
 	const strapiDomainPrefix = domainPaths.strapiDomainPrefix
 
 	//make sure none of the records already exist
-	if (await doesARecordExist(subDomain, rootDomain)) throw new Error(`A record already exists for ${subDomain}`)
-	if (await doesARecordExist(`${strapiDomainPrefix}.${subDomain}`, rootDomain)) throw new Error(`A record already exists for ${strapiDomainPrefix}.${subDomain}`)
-	if (await doesARecordExist(`www.${subDomain}`, rootDomain)) throw new Error(`A record already exists for www.${subDomain}`)
 
-	addARecord(subDomain, hostIP, rootDomain)
-	addARecord(`${strapiDomainPrefix}.${subDomain}`, hostIP, rootDomain)
-	addARecord(`www.${subDomain}`, hostIP, rootDomain)
+	if (await doesARecordExist(subDomain, rootDomain)) {
+		if (process.env.EXISTING_RESOURCE_BEHAVIOUR === 'fail')
+			throw new Error(`A record already exists for ${subDomain}`)
+	} else {
+		addARecord(subDomain, hostIP, rootDomain)
+	}
+
+	if (await doesARecordExist(`${strapiDomainPrefix}.${subDomain}`, rootDomain)) {
+		if (process.env.EXISTING_RESOURCE_BEHAVIOUR === 'fail')
+			throw new Error(`A record already exists for ${strapiDomainPrefix}.${subDomain}`)
+	} else {
+		addARecord(`${strapiDomainPrefix}.${subDomain}`, hostIP, rootDomain)
+	}
+
+	if (await doesARecordExist(`www.${subDomain}`, rootDomain)) {
+		if (process.env.EXISTING_RESOURCE_BEHAVIOUR === 'fail')
+			throw new Error(`A record already exists for www.${subDomain}`)
+	} else {
+		addARecord(`www.${subDomain}`, hostIP, rootDomain)
+	}
+
 	//getRecords()
 	//console.log(rootDomain, subDomain, `${strapiDomainPrefix}.${subDomain}`, `www.${subDomain}`)
 }
 
-main() 
+main()
 
 
 
